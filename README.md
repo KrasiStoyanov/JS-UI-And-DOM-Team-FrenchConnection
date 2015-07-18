@@ -1,8 +1,7 @@
-#JavaScript DOM & UI: Teamwork Assignment
+#JS UI and DOM Team "French Connection"
 *****************************************
 
-This document describes the teamwork assignment for Telerik Academy students in JavaScript
-UI & DOM course
+Repository for JS UI & DOM Teamwork
 
 #Project Description
 
