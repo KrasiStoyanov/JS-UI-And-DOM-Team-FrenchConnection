@@ -55,6 +55,7 @@ function createTitle(msg) {
     _stage.font = "20px Arial";
     _stage.fillText(msg, _puzzleWidth / 2, _puzzleHeight - 20);
 }
+
 function buildPieces() {
     var i;
     var piece;
