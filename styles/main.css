@@ -90,3 +90,13 @@ a > img {
 footer {
     margin-top: 50px;
 }
+
+/*Canvas Styles*/
+#canvas-container {
+    width: 100%;
+    text-align: center;
+}
+
+canvas {
+    display: inline;
+}
