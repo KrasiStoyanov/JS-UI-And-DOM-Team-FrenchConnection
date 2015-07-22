@@ -98,5 +98,14 @@ footer {
 }
 
 canvas {
-    display: inline;
+    float: left;
+}
+
+#user-controls {
+    float: left;
+    margin: 30px 60px;
+    padding: 20px 30px;
+    border: 6px solid #E18A27;
+    border-radius: 6px;
+    
 }
