@@ -179,7 +179,7 @@ var playField = (function () {
                         yPos += _pieceHeight;
                     }
                 }
-                document.onmousedown = playField.shufflePuzzle;
+                _canvas.onmousedown = playField.shufflePuzzle;
             }
         });
 
@@ -203,7 +203,7 @@ var playField = (function () {
                         yPos += _pieceHeight;
                     }
                 }
-                document.onmousedown = playField.onPuzzleClick;
+                _canvas.onmousedown = playField.onPuzzleClick;
             }
         });
 
@@ -224,8 +224,8 @@ var playField = (function () {
                    _stage.globalAlpha = .9;
                    _stage.drawImage(_img, _currentPiece.startX, _currentPiece.startY, _pieceWidth, _pieceHeight, _mouse.x - (_pieceWidth / 2), _mouse.y - (_pieceHeight / 2), _pieceWidth, _pieceHeight);
                    _stage.restore();
-                   document.onmousemove = playField.updatePuzzle;
-                   document.onmouseup = playField.pieceDropped;
+                   _canvas.onmousemove = playField.updatePuzzle;
+                   _canvas.onmouseup = playField.pieceDropped;
                }
            }
         });
@@ -301,8 +301,8 @@ var playField = (function () {
             value: function (e) {
                 var tmp;
 
-                document.onmousemove = null;
-                document.onmouseup = null;
+                _canvas.onmousemove = null;
+                _canvas.onmouseup = null;
                 if (_currentDropPiece != null) {
                     tmp = {xPos: _currentPiece.currentX, yPos: _currentPiece.currentY};
                     _currentPiece.currentX = _currentDropPiece.currentX;
@@ -339,9 +339,9 @@ var playField = (function () {
 
         Object.defineProperty(playfield,'gameOver', {
             value: function () {
-                document.onmousedown = null;
-                document.onmousemove = null;
-                document.onmouseup = null;
+                _canvas.onmousedown = null;
+                _canvas.onmousemove = null;
+                _canvas.onmouseup = null;
                 playField.initPuzzle();
             }
         });
