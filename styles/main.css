@@ -98,6 +98,7 @@ footer {
 }
 
 canvas {
+    margin-top: 30px;
     float: left;
     border: 6px solid #E18A27 !important;
     border-radius: 6px;
