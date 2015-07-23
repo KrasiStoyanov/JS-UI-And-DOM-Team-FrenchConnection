@@ -10,29 +10,25 @@
         Your browser doesn't support canvas.
     </canvas>
     <div id="user-controls">
-        <form method="post">
             <label for="difficulty">Select difficulty</label>
             <br />
-            <select name="difficulty">
+            <select id="difficulty">
                 <option value="3">Easy</option>
                 <option value="4" selected="selected">Normal</option>
                 <option value="5">Hard</option>
                 <option value="6">Very hard</option>
                 <option value="7">Hardcore</option>
             </select>
-            <button type="submit">Set</button>
-        </form>
+            <button type="submit" id="set-difficulty">Set</button>
     </div>
 <script src="js/puzzle.js"></script>
 <script type="text/javascript">
-	var form = document.querySelectorAll('#user-controls form')[0];
-	var button = document.querySelectorAll('#user-controls form button')[0];
 	var selectedDifficulty = 4;
-
-	button.addEventListener('click', function () {
-		var selectedDifficultyIndex = form.elements["difficulty"].selectedIndex;
-		selectedDifficulty = parseInt(form.elements["difficulty"]
-			.options[selectedDifficultyIndex].value);
+	document.getElementById("set-difficulty").addEventListener('click', function () {
+		var select = document.getElementById("difficulty");
+        var selectedValue = select.options[select.selectedIndex].value;
+		selectedDifficulty = parseInt(selectedValue);
+        createPlayField('images/gallery/cat.jpg', selectedDifficulty);
 	}, false);
 
 	createPlayField('images/gallery/cat.jpg', selectedDifficulty);
