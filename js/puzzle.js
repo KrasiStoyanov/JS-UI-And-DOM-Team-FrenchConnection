@@ -111,7 +111,7 @@ var playField = (function () {
                 _img.addEventListener('load', playField.onImage, false);
                 _img.src = imageSrc;
                 _puzzle_difficulty = difficulty;
-                return playField;
+                return this;
             }
         });
 

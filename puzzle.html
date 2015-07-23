@@ -6,32 +6,54 @@
     <link rel="stylesheet" href="styles/main.css"/>
 </head>
 <body>
-    <canvas id="canvas" width="600" height="600">
-        Your browser doesn't support canvas.
-    </canvas>
-    <div id="user-controls">
-            <label for="difficulty">Select difficulty</label>
-            <br />
-            <select id="difficulty">
-                <option value="3">Easy</option>
-                <option value="4" selected="selected">Normal</option>
-                <option value="5">Hard</option>
-                <option value="6">Very hard</option>
-                <option value="7">Hardcore</option>
-            </select>
-            <button type="submit" id="set-difficulty">Set</button>
-    </div>
+<canvas id="canvas" width="600" height="600">
+    Your browser doesn't support canvas.
+</canvas>
+<div id="user-controls">
+    <input id="uploadImg" type='file' value="Upload own puzzle picture"/>
+    <img id="myImg" width="200" src="#" alt="Your Image" />
+    <br />
+    <br />
+
+    <label for="difficulty">Select difficulty</label>
+    <br/>
+    <select id="difficulty">
+        <option value="3">Easy</option>
+        <option value="4" selected="selected">Normal</option>
+        <option value="5">Hard</option>
+        <option value="6">Very hard</option>
+        <option value="7">Hardcore</option>
+    </select>
+    <button type="submit" id="set-difficulty">Set</button>
+
+
+</div>
 <script src="js/puzzle.js"></script>
 <script type="text/javascript">
-	var selectedDifficulty = 4;
-	document.getElementById("set-difficulty").addEventListener('click', function () {
-		var select = document.getElementById("difficulty");
-        var selectedValue = select.options[select.selectedIndex].value;
-		selectedDifficulty = parseInt(selectedValue);
-        createPlayField('images/gallery/cat.jpg', selectedDifficulty);
-	}, false);
+    var defaultDifficulty = 4;
+    var defaultPuzzleImage = 'images/gallery/cat.jpg';
 
-	createPlayField('images/gallery/cat.jpg', selectedDifficulty);
+    document.getElementById("uploadImg").addEventListener('change', function () {
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+            reader.onload = imageIsLoaded;
+            reader.readAsDataURL(this.files[0]);
+        }
+    }, false);
+
+    document.getElementById("set-difficulty").addEventListener('click', function () {
+        var select = document.getElementById("difficulty");
+        var selectedValue = select.options[select.selectedIndex].value;
+        defaultDifficulty = parseInt(selectedValue);
+        createPlayField(defaultPuzzleImage, defaultDifficulty);
+    }, false);
+
+    function imageIsLoaded(e) {
+        document.getElementById('myImg').src = e.target.result;
+        defaultPuzzleImage = e.target.result;
+    }
+
+    createPlayField(defaultPuzzleImage, defaultDifficulty);
 </script>
 </body>
 </html>
