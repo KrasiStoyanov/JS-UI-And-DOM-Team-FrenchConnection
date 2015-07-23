@@ -1,7 +1,11 @@
+var mainCanvas = document.getElementById('canvas');
+const MAX_CANVAS_WIDTH = mainCanvas.width;
+const MAX_CANVAS_HEIGHT = mainCanvas.height;
+
 var playField = (function () {
 
     const PUZZLE_HOVER_TINT = '#009900';
-
+    
     var _stage,
         _canvas,
         _img,
@@ -117,6 +121,11 @@ var playField = (function () {
 
         Object.defineProperty(playfield, 'onImage', {
             value: function (e) {
+                if (_img.width > MAX_CANVAS_WIDTH || _img.height > MAX_CANVAS_HEIGHT) {
+                    var resizedImageSrc = resizeImage(_img);
+                    _img.setAttribute('src', resizedImageSrc);
+                }
+
                 _pieceWidth = Math.floor(_img.width / _puzzle_difficulty);
                 _pieceHeight = Math.floor(_img.height / _puzzle_difficulty);
                 _puzzleWidth = _pieceWidth * _puzzle_difficulty;
@@ -370,4 +379,37 @@ var playField = (function () {
 
 function createPlayField(imageSrc, difficulty) {
     var plr = Object.create(playField).init(imageSrc, difficulty);
+}
+
+function resizeImage(img) {
+    // Create off-screen canvas for resizing purposes
+    var canvas = document.createElement('canvas'),
+        ctx = canvas.getContext('2d');
+
+    var width = img.width;
+    var height = img.height;
+
+    // Scale image
+    if (width > height) {
+      if (width > MAX_CANVAS_WIDTH) {
+        height *= MAX_CANVAS_WIDTH / width;
+        width = MAX_CANVAS_WIDTH;
+      }
+    } else {
+      if (height > MAX_CANVAS_HEIGHT) {
+        width *= MAX_CANVAS_HEIGHT / height;
+        height = MAX_CANVAS_HEIGHT;
+      }
+    }
+
+    // Set dimension to target size
+    canvas.width = width;
+    canvas.height = height;
+
+    // Draw source image into the off-screen canvas:
+    ctx.drawImage(img, 0, 0, width, height);
+
+    // Encode image to Base64
+    var newImage = canvas.toDataURL("image/png");
+    return newImage;
 }
