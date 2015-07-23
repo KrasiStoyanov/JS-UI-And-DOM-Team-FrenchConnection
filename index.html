@@ -13,8 +13,24 @@
 
 <div id="wrapper">
     <header>
-        <img src="images/puzzle-logo.svg" title="Puzzle Master"/>
 
+        <svg width="500" height="300">
+            <defs>
+                <pattern id="pattern1"
+                         x="0" y="0" width="200" height="200"
+                         patternUnits="userSpaceOnUse" >
+
+                    <image height="200" xlink:href="images/puzzle-logo.svg" width="200"></image>
+                </pattern>
+            </defs>
+            <rect x="0" y="0" width="200" height="200"
+                  style="fill: url(#pattern1); ">
+                <animateMotion
+                        path="M10,50 q60,50 100,0 q60,-50 100,0"
+                        begin="0s" dur="10s" repeatCount="indefinite"
+                        />
+            </rect>
+        </svg>
         <h1>Puzzle Master</h1>
     </header>
 
