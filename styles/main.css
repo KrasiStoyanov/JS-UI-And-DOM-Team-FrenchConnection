@@ -99,6 +99,8 @@ footer {
 
 canvas {
     float: left;
+    border: 6px solid #E18A27 !important;
+    border-radius: 6px;
 }
 
 #user-controls {
