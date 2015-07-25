@@ -5,7 +5,7 @@ const MAX_CANVAS_HEIGHT = mainCanvas.height;
 var playField = (function () {
 
     const PUZZLE_HOVER_TINT = '#009900';
-    
+
     var _stage,
         _canvas,
         _img,
@@ -161,13 +161,13 @@ var playField = (function () {
             value: function (msg) {
                 _stage.fillStyle = "#000000";
                 _stage.globalAlpha = .4;
-                _stage.fillRect(100, _puzzleHeight - 40, _puzzleWidth - 200, 40);
+                _stage.fillRect(100, 0, _puzzleWidth - 200, 40);
                 _stage.fillStyle = "#FFFFFF";
                 _stage.globalAlpha = 1;
                 _stage.textAlign = "center";
                 _stage.textBaseline = "middle";
                 _stage.font = "20px Arial";
-                _stage.fillText(msg, _puzzleWidth / 2, _puzzleHeight - 20);
+                _stage.fillText(msg, _puzzleWidth / 2, 20);
             }
         });
 
@@ -313,7 +313,7 @@ var playField = (function () {
                 _canvas.onmousemove = null;
                 _canvas.onmouseup = null;
                 if (_currentDropPiece != null) {
-                    tmp = { xPos: _currentPiece.currentX, yPos: _currentPiece.currentY };
+                    tmp = {xPos: _currentPiece.currentX, yPos: _currentPiece.currentY};
                     _currentPiece.currentX = _currentDropPiece.currentX;
                     _currentPiece.currentY = _currentDropPiece.currentY;
                     _currentDropPiece.currentX = tmp.xPos;
@@ -391,15 +391,15 @@ function resizeImage(img) {
 
     // Scale image
     if (width > height) {
-      if (width > MAX_CANVAS_WIDTH) {
-        height *= MAX_CANVAS_WIDTH / width;
-        width = MAX_CANVAS_WIDTH;
-      }
+        if (width > MAX_CANVAS_WIDTH) {
+            height *= MAX_CANVAS_WIDTH / width;
+            width = MAX_CANVAS_WIDTH;
+        }
     } else {
-      if (height > MAX_CANVAS_HEIGHT) {
-        width *= MAX_CANVAS_HEIGHT / height;
-        height = MAX_CANVAS_HEIGHT;
-      }
+        if (height > MAX_CANVAS_HEIGHT) {
+            width *= MAX_CANVAS_HEIGHT / height;
+            height = MAX_CANVAS_HEIGHT;
+        }
     }
 
     // Set dimension to target size
