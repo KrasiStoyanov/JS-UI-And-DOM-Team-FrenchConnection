@@ -160,7 +160,7 @@ var playField = (function () {
         Object.defineProperty(playfield, 'createTitle', {
             value: function (msg) {
                 _stage.fillStyle = "#000000";
-                _stage.globalAlpha = .4;
+                _stage.globalAlpha = 0.4;
                 _stage.fillRect(100, 0, _puzzleWidth - 200, 40);
                 _stage.fillStyle = "#FFFFFF";
                 _stage.globalAlpha = 1;
@@ -196,17 +196,20 @@ var playField = (function () {
             value: function () {
                 _pieces = playField.shuffleArray(_pieces);
                 _stage.clearRect(0, 0, _puzzleWidth, _puzzleHeight);
-                var i;
-                var piece;
-                var xPos = 0;
-                var yPos = 0;
-                for (i = 0; i < _pieces.length; i++) {
+                var i,
+                    len,
+                    piece,
+                    xPos = 0,
+                    yPos = 0;
+
+                for (i = 0, len = _pieces.length; i < len; i += 1) {
                     piece = _pieces[i];
                     piece.currentX = xPos;
                     piece.currentY = yPos;
                     _stage.drawImage(_img, piece.startX, piece.startY, _pieceWidth, _pieceHeight, xPos, yPos, _pieceWidth, _pieceHeight);
                     _stage.strokeRect(xPos, yPos, _pieceWidth, _pieceHeight);
                     xPos += _pieceWidth;
+
                     if (xPos >= _puzzleWidth) {
                         xPos = 0;
                         yPos += _pieceHeight;
@@ -227,10 +230,11 @@ var playField = (function () {
                     _mouse.y = e.offsetY - _canvas.offsetTop;
                 }
                 _currentPiece = playField.checkPieceClicked();
+
                 if (_currentPiece != null) {
                     _stage.clearRect(_currentPiece.currentX, _currentPiece.currentY, _pieceWidth, _pieceHeight);
                     _stage.save();
-                    _stage.globalAlpha = .9;
+                    _stage.globalAlpha = 0.9;
                     _stage.drawImage(_img, _currentPiece.startX, _currentPiece.startY, _pieceWidth, _pieceHeight, _mouse.x - (_pieceWidth / 2), _mouse.y - (_pieceHeight / 2), _pieceWidth, _pieceHeight);
                     _stage.restore();
                     _canvas.onmousemove = playField.updatePuzzle;
@@ -247,7 +251,8 @@ var playField = (function () {
 
                 for (i = 0, len = _pieces.length; i < len; i += 1) {
                     piece = _pieces[i];
-                    if (_mouse.x < piece.currentX || _mouse.x > (piece.currentX + _pieceWidth) || _mouse.y < piece.currentY || _mouse.y > (piece.currentY + _pieceHeight)) {
+                    if (_mouse.x < piece.currentX || _mouse.x > (piece.currentX + _pieceWidth) || 
+                        _mouse.y < piece.currentY || _mouse.y > (piece.currentY + _pieceHeight)) {
                         //PIECE NOT HIT
                     }
                     else {
@@ -263,7 +268,6 @@ var playField = (function () {
                 var i,
                     len,
                     piece;
-
                 _currentDropPiece = null;
 
                 if (e.layerX || e.layerX == 0) {
@@ -273,7 +277,6 @@ var playField = (function () {
                     _mouse.x = e.offsetX - _canvas.offsetLeft;
                     _mouse.y = e.offsetY - _canvas.offsetTop;
                 }
-
                 _stage.clearRect(0, 0, _puzzleWidth, _puzzleHeight);
 
                 for (i = 0, len = _pieces.length; i < len; i += 1) {
@@ -281,26 +284,32 @@ var playField = (function () {
                     if (piece == _currentPiece) {
                         continue;
                     }
+
                     _stage.drawImage(_img, piece.startX, piece.startY, _pieceWidth, _pieceHeight, piece.currentX, piece.currentY, _pieceWidth, _pieceHeight);
                     _stage.strokeRect(piece.currentX, piece.currentY, _pieceWidth, _pieceHeight);
+
                     if (_currentDropPiece == null) {
-                        if (_mouse.x < piece.currentX || _mouse.x > (piece.currentX + _pieceWidth) || _mouse.y < piece.currentY || _mouse.y > (piece.currentY + _pieceHeight)) {
+                        if (_mouse.x < piece.currentX || _mouse.x > (piece.currentX + _pieceWidth) || 
+                            _mouse.y < piece.currentY || _mouse.y > (piece.currentY + _pieceHeight)) {
                             //NOT OVER
                         }
                         else {
                             _currentDropPiece = piece;
                             _stage.save();
-                            _stage.globalAlpha = .4;
+                            _stage.globalAlpha = 0.4;
                             _stage.fillStyle = PUZZLE_HOVER_TINT;
-                            _stage.fillRect(_currentDropPiece.currentX, _currentDropPiece.currentY, _pieceWidth, _pieceHeight);
+                            _stage.fillRect(_currentDropPiece.currentX, 
+                                            _currentDropPiece.currentY, 
+                                            _pieceWidth, _pieceHeight);
                             _stage.restore();
                         }
                     }
                 }
 
                 _stage.save();
-                _stage.globalAlpha = .6;
-                _stage.drawImage(_img, _currentPiece.startX, _currentPiece.startY, _pieceWidth, _pieceHeight, _mouse.x - (_pieceWidth / 2), _mouse.y - (_pieceHeight / 2), _pieceWidth, _pieceHeight);
+                _stage.globalAlpha = 0.6;
+                _stage.drawImage(_img, _currentPiece.startX, _currentPiece.startY, _pieceWidth, _pieceHeight, 
+                                 _mouse.x - (_pieceWidth / 2), _mouse.y - (_pieceHeight / 2), _pieceWidth, _pieceHeight);
                 _stage.restore();
                 _stage.strokeRect(_mouse.x - (_pieceWidth / 2), _mouse.y - (_pieceHeight / 2), _pieceWidth, _pieceHeight);
             }

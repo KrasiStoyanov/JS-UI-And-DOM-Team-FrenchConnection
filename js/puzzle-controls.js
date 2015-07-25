@@ -1,5 +1,5 @@
-var defaultDifficulty = 4;
-var defaultPuzzleImage = 'images/gallery/cat.jpg';
+var defaultDifficulty = 4,
+    defaultPuzzleImage = 'images/gallery/cat.jpg';
 
 // Upload your own image
 document.getElementById("uploadImg").addEventListener('change', function () {
@@ -17,8 +17,8 @@ function imageIsLoaded(e) {
 
 // Set the difficulty level
 document.getElementById("set-options").addEventListener('click', function () {
-    var select = document.getElementById("difficulty");
-    var selectedValue = select.options[select.selectedIndex].value;
+    var select = document.getElementById("difficulty"),
+        selectedValue = select.options[select.selectedIndex].value;
     defaultDifficulty = parseInt(selectedValue);
     createPlayField(defaultPuzzleImage, defaultDifficulty);
 }, false);
