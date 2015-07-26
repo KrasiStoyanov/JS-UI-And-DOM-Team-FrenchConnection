@@ -90,6 +90,10 @@ canvas {
     border-radius: 6px;
 }
 
+svg {
+	margin-top: 30px;
+}
+
 #user-controls {
     float: left;
     margin: 30px 60px;
@@ -99,6 +103,3 @@ canvas {
     
 }
 
-svg {
-	margin-top: 30px;
-}
