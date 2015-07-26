@@ -1,13 +1,5 @@
-html,
-body,
-div,
-section,
-header,
-footer,
-h1,
-h2,
-h3,
-a {
+/* INDEX - START */
+* {
     margin: 0;
     padding: 0;
 }
@@ -36,6 +28,10 @@ body {
 #wrapper header img {
     padding: 20px 0;
     width: 20%;;
+}
+
+#wrapper header svg {
+    margin-top: 30px;
 }
 
 section {
@@ -94,8 +90,11 @@ a > img {
 footer {
     margin-top: 50px;
 }
+/* INDEX - END */
 
-/*Canvas Styles*/
+/* ----------------------------------------------------- */
+
+/* PUZZLE - START */
 #canvas-container {
     width: 100%;
     text-align: center;
@@ -124,7 +123,7 @@ canvas {
     position: absolute;
 }
 
-svg {
+.loader svg {
     position: absolute;
     top: 0;
     right: 0;
@@ -138,3 +137,4 @@ svg path,
 svg rect{
     fill: #27AAE1;
 }
+/* PUZZLE - END */
