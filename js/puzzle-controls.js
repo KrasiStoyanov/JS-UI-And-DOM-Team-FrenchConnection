@@ -10,6 +10,14 @@ document.getElementById("uploadImg").addEventListener('change', function () {
     }
 }, false);
 
+// Paste your own image link
+function useExternalLink() {
+    var externalImageLink = document.getElementById('pasteLink').value;
+
+    defaultPuzzleImage = externalImageLink;
+    document.getElementById('myImg').src = externalImageLink;
+}
+
 function imageIsLoaded(e) {
     document.getElementById('myImg').src = e.target.result;
     defaultPuzzleImage = e.target.result;
