@@ -73,24 +73,6 @@ a > img {
     border: 0;
 }
 
-.button {
-    padding: 10px;
-    border-bottom: 3px solid #1989b8;
-    border-radius: 5px;
-    background-color: #27AAE1;
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-
-    transition: all ease-in .1s;
-}
-
-.button:hover {
-    background-color: #1989b8;
-    color: #fff;
-    text-decoration: none;
-}
-
 footer {
     margin-top: 50px;
 }
