@@ -95,6 +95,10 @@ footer {
 /* ----------------------------------------------------- */
 
 /* PUZZLE - START */
+#main-content {
+    display: none;
+}
+
 #canvas-container {
     width: 100%;
     text-align: center;
