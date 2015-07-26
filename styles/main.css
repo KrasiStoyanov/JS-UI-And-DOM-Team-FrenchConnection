@@ -98,3 +98,7 @@ canvas {
     border-radius: 6px;
     
 }
+
+svg {
+	margin-top: 30px;
+}
