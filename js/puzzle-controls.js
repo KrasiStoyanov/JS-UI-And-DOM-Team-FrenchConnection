@@ -2,22 +2,8 @@ var defaultDifficulty = 4,
     defaultPuzzleImage = 'images/gallery/cat.jpg';
 
 //Choose an image from mthe library
-document.getElementById("btn-gallery").addEventListener('click', function() {
-    var galleryContainer = document.getElementById("gallery-container");
-
-    if (galleryContainer.style.display === 'undefined' || galleryContainer.style.display === '') {
-        galleryContainer.style.display = 'none';
-    }
-
-    if (galleryContainer.style.display != 'none') {
-        galleryContainer.style.display = 'none';
-        document.getElementById('gallery-container').innerHTML = "";
-    } else {
-        galleryContainer.style.display = 'block';
-        window.puzzle.gallery.loadGallery("gallery-container");
-        window.puzzle.gallery.extractSelectedImage(document.getElementById('myImg'));
-        //defaultPuzzleImage = window.puzzle.gallery.extractSelectedImagePath();
-    }
+$('#btn-gallery').on('click', function() {
+    $('#gallery-container').slideToggle('slow');
 });
 
 // Upload your own image

@@ -141,4 +141,19 @@ svg path,
 svg rect{
     fill: #27AAE1;
 }
+
+#gallery-container {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    float: left;
+    display: none;
+}
+
+.thumb {
+    border: 1px solid #000;
+    height: 75px;
+    margin: 5px 5px 0 0;
+}
 /* PUZZLE - END */
