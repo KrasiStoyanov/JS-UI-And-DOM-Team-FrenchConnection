@@ -155,6 +155,7 @@ var playField = (function () {
                 _stage.drawImage(_img, 0, 0, _puzzleWidth, _puzzleHeight, 0, 0, _puzzleWidth, _puzzleHeight);
                 playField.createTitle("Click to Start Puzzle");
                 playField.buildPieces();
+                timer.showTimer();
             }
         });
 
@@ -217,6 +218,8 @@ var playField = (function () {
                     }
                 }
                 _canvas.onmousedown = playField.onPuzzleClick;
+
+                timer.startTimer();
             }
         });
 
@@ -241,6 +244,7 @@ var playField = (function () {
                     _canvas.onmousemove = playField.updatePuzzle;
                     _canvas.onmouseup = playField.pieceDropped;
                 }
+
             }
         });
 
@@ -252,7 +256,7 @@ var playField = (function () {
 
                 for (i = 0, len = _pieces.length; i < len; i += 1) {
                     piece = _pieces[i];
-                    if (_mouse.x < piece.currentX || _mouse.x > (piece.currentX + _pieceWidth) || 
+                    if (_mouse.x < piece.currentX || _mouse.x > (piece.currentX + _pieceWidth) ||
                         _mouse.y < piece.currentY || _mouse.y > (piece.currentY + _pieceHeight)) {
                         //PIECE NOT HIT
                     }
@@ -290,7 +294,7 @@ var playField = (function () {
                     _stage.strokeRect(piece.currentX, piece.currentY, _pieceWidth, _pieceHeight);
 
                     if (_currentDropPiece == null) {
-                        if (_mouse.x < piece.currentX || _mouse.x > (piece.currentX + _pieceWidth) || 
+                        if (_mouse.x < piece.currentX || _mouse.x > (piece.currentX + _pieceWidth) ||
                             _mouse.y < piece.currentY || _mouse.y > (piece.currentY + _pieceHeight)) {
                             //NOT OVER
                         }
@@ -299,9 +303,9 @@ var playField = (function () {
                             _stage.save();
                             _stage.globalAlpha = 0.4;
                             _stage.fillStyle = PUZZLE_HOVER_TINT;
-                            _stage.fillRect(_currentDropPiece.currentX, 
-                                            _currentDropPiece.currentY, 
-                                            _pieceWidth, _pieceHeight);
+                            _stage.fillRect(_currentDropPiece.currentX,
+                                _currentDropPiece.currentY,
+                                _pieceWidth, _pieceHeight);
                             _stage.restore();
                         }
                     }
@@ -309,8 +313,8 @@ var playField = (function () {
 
                 _stage.save();
                 _stage.globalAlpha = 0.6;
-                _stage.drawImage(_img, _currentPiece.startX, _currentPiece.startY, _pieceWidth, _pieceHeight, 
-                                 _mouse.x - (_pieceWidth / 2), _mouse.y - (_pieceHeight / 2), _pieceWidth, _pieceHeight);
+                _stage.drawImage(_img, _currentPiece.startX, _currentPiece.startY, _pieceWidth, _pieceHeight,
+                    _mouse.x - (_pieceWidth / 2), _mouse.y - (_pieceHeight / 2), _pieceWidth, _pieceHeight);
                 _stage.restore();
                 _stage.strokeRect(_mouse.x - (_pieceWidth / 2), _mouse.y - (_pieceHeight / 2), _pieceWidth, _pieceHeight);
             }
@@ -382,30 +386,30 @@ var playField = (function () {
             }
         });
 
-        timer = (function (){
-                var clsStopwatch = function() {    
-                var startAt = 0,    
+        timer = (function () {
+            var clsStopwatch = function () {
+                var startAt = 0,
                     lapTime = 0;
 
-                    var now = function() {
+                var now = function () {
                     return (new Date()).getTime();
                 };
-              
-                this.start = function() {
+
+                this.start = function () {
                     startAt = startAt ? startAt : now();
                 };
 
-                
-                this.stop = function() {       
+
+                this.stop = function () {
                     lapTime = startAt ? lapTime + now() - startAt : lapTime;
-                    startAt = 0; 
+                    startAt = 0;
                 };
-                
-                this.reset = function() {
+
+                this.reset = function () {
                     lapTime = startAt = 0;
                 };
-               
-                this.time = function() {
+
+                this.time = function () {
                     return lapTime + (startAt ? now() - startAt : 0);
                 };
             };
@@ -425,41 +429,44 @@ var playField = (function () {
                     seconds = 0,
                     newTime = '';
 
-                hours = Math.floor( time / (60 * 60 * 1000) );
+                hours = Math.floor(time / (60 * 60 * 1000));
                 time = time % (60 * 60 * 1000);
-                minutes = Math.floor( time / (60 * 1000) );
+                minutes = Math.floor(time / (60 * 1000));
                 time = time % (60 * 1000);
-                seconds = Math.floor( time / 1000 );
-                
+                seconds = Math.floor(time / 1000);
+
                 newTime = pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);
                 return newTime;
             }
 
-            function showTimer() {
+            var tmr = {
+               showTimer:function() {
                 timer = document.getElementById('timer');
-                updateTimer();
-            }
+                tmr.updateTimer();
+            },
 
-            function updateTimer() {
+             updateTimer:function() {
                 timer.innerHTML = formatTime(playTime.time());
-            }
+            },
 
-            function startTimer() {
-                clocktimer = setInterval("updateTimer()", 1);
+           startTimer: function () {
+                clocktimer = setInterval("tmr.updateTimer()", 1);
                 playTime.start();
-            }
+            },
 
-            function stopTimer() {
+            stopTimer:function () {
                 playTime.stop();
                 clearInterval(clocktimer);
-            }
+            },
 
-            function resetTimer() {
-                stopTimer();
+            resetTimer:function () {
+                tmr.stopTimer();
                 playTime.reset();
-                updateTimer();
+                tmr.updateTimer();
             }
+        };
 
+            return tmr;
         }());
 
         return playfield;
