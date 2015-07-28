@@ -155,7 +155,9 @@ var playField = (function () {
                 _stage.drawImage(_img, 0, 0, _puzzleWidth, _puzzleHeight, 0, 0, _puzzleWidth, _puzzleHeight);
                 playField.createTitle("Click to Start Puzzle");
                 playField.buildPieces();
-                timer.showTimer();
+
+                timerr.showTimer();
+                timerr.resetTimer();
             }
         });
 
@@ -219,7 +221,8 @@ var playField = (function () {
                 }
                 _canvas.onmousedown = playField.onPuzzleClick;
 
-                timer.startTimer();
+                timerr.startTimer();
+                console.log('timer has been started!');
             }
         });
 
@@ -366,6 +369,8 @@ var playField = (function () {
                 _canvas.onmousedown = null;
                 _canvas.onmousemove = null;
                 _canvas.onmouseup = null;
+                timerr.stopTimer();
+
                 playField.initPuzzle();
             }
         });
@@ -386,7 +391,7 @@ var playField = (function () {
             }
         });
 
-        timer = (function () {
+         timerr = (function () {
             var clsStopwatch = function () {
                 var startAt = 0,
                     lapTime = 0;
@@ -450,7 +455,7 @@ var playField = (function () {
             },
 
            startTimer: function () {
-                clocktimer = setInterval("tmr.updateTimer()", 1);
+                clocktimer = setInterval("timerr.updateTimer()", 1000);
                 playTime.start();
             },
 
