@@ -20,7 +20,8 @@ var playField = (function () {
         _puzzle_difficulty,
         mouse,
         puzzlePiece,
-        playField;
+        playField,
+        timer;
 
     mouse = (function () {
         var mouse = Object.create({});
@@ -351,6 +352,7 @@ var playField = (function () {
                 }
                 if (gameWin) {
                     setTimeout(playField.gameOver, 500);
+                    timer.stopTimer();
                 }
             }
         });
@@ -379,6 +381,86 @@ var playField = (function () {
                 return o;
             }
         });
+
+        timer = (function (){
+                var clsStopwatch = function() {    
+                var startAt = 0,    
+                    lapTime = 0;
+
+                    var now = function() {
+                    return (new Date()).getTime();
+                };
+              
+                this.start = function() {
+                    startAt = startAt ? startAt : now();
+                };
+
+                
+                this.stop = function() {       
+                    lapTime = startAt ? lapTime + now() - startAt : lapTime;
+                    startAt = 0; 
+                };
+                
+                this.reset = function() {
+                    lapTime = startAt = 0;
+                };
+               
+                this.time = function() {
+                    return lapTime + (startAt ? now() - startAt : 0);
+                };
+            };
+
+            var playTime = new clsStopwatch(),
+                timer,
+                clocktimer;
+
+            function pad(num, size) {
+                var s = "0000" + num;
+                return s.substr(s.length - size);
+            }
+
+            function formatTime(time) {
+                var hours = 0,
+                    minutes = 0,
+                    seconds = 0,
+                    newTime = '';
+
+                hours = Math.floor( time / (60 * 60 * 1000) );
+                time = time % (60 * 60 * 1000);
+                minutes = Math.floor( time / (60 * 1000) );
+                time = time % (60 * 1000);
+                seconds = Math.floor( time / 1000 );
+                
+                newTime = pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);
+                return newTime;
+            }
+
+            function showTimer() {
+                timer = document.getElementById('timer');
+                updateTimer();
+            }
+
+            function updateTimer() {
+                timer.innerHTML = formatTime(playTime.time());
+            }
+
+            function startTimer() {
+                clocktimer = setInterval("updateTimer()", 1);
+                playTime.start();
+            }
+
+            function stopTimer() {
+                playTime.stop();
+                clearInterval(clocktimer);
+            }
+
+            function resetTimer() {
+                stopTimer();
+                playTime.reset();
+                updateTimer();
+            }
+
+        }());
 
         return playfield;
     }());
