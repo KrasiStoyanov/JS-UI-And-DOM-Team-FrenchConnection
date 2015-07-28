@@ -142,8 +142,9 @@ svg rect{
     fill: #27AAE1;
 }
 
+/* Gallery */
 #gallery-container {
-    margin-top: 20px;
+    margin: 20px;
     padding: 10px;
     border: 1px solid #ccc;
     background-color: #fff;
@@ -154,6 +155,12 @@ svg rect{
 .thumb {
     border: 1px solid #000;
     height: 75px;
-    margin: 5px 5px 0 0;
+    margin: 5px 10px 0 0;
 }
+
+.selected-image {
+    box-shadow: 0px 0px 10px #005DFF;
+    height: 85px;
+}
+
 /* PUZZLE - END */

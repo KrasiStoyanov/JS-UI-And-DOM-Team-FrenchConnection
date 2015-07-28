@@ -1,7 +1,7 @@
 var defaultDifficulty = 4,
     defaultPuzzleImage = 'images/gallery/cat.jpg';
 
-//Choose an image from mthe library
+// Show-hide gallery
 $('#btn-gallery').on('click', function() {
     $('#gallery-container').slideToggle('slow');
 });
