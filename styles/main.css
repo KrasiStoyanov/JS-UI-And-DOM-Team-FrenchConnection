@@ -162,5 +162,13 @@ svg rect{
     box-shadow: 0px 0px 10px #005DFF;
     height: 85px;
 }
+#timerDiv {
+    margin-left: 80px;
+}
 
+#timer {
+    font-family: Impact, Charcoal, sans-serif;
+    font-size: 30px;
+    color: #27AAE1;
+}
 /* PUZZLE - END */
