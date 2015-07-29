@@ -123,7 +123,7 @@ var playField = (function () {
         Object.defineProperty(playfield, 'onImage', {
             value: function (e) {
                 if (_img.width > MAX_CANVAS_WIDTH || _img.height > MAX_CANVAS_HEIGHT) {
-                    var resizedImageSrc = resizeImage(_img);
+                    var resizedImageSrc = resizeImage(_img, MAX_CANVAS_WIDTH, MAX_CANVAS_HEIGHT);
                     _img.setAttribute('src', resizedImageSrc);
                 }
 
@@ -484,28 +484,28 @@ function createPlayField(imageSrc, difficulty) {
     var plr = Object.create(playField).init(imageSrc, difficulty);
 }
 
-function resizeImage(img) {
+function resizeImage(img, maxWidth, maxHeight) {
     // Create off-screen canvas for resizing purposes
     var canvas = document.createElement('canvas'),
-        ctx = canvas.getContext('2d');
-
-    var width = img.width;
-    var height = img.height;
+        ctx = canvas.getContext('2d'),
+        width = img.width,
+        height = img.height,
+        resizedImage;
 
     // Scale image
     if (width > height) {
-        if (width > MAX_CANVAS_WIDTH) {
-            height *= MAX_CANVAS_WIDTH / width;
-            width = MAX_CANVAS_WIDTH;
+        if (width > maxWidth) {
+            height *= maxWidth / width;
+            width = maxWidth;
         }
     } else {
-        if (height > MAX_CANVAS_HEIGHT) {
-            width *= MAX_CANVAS_HEIGHT / height;
-            height = MAX_CANVAS_HEIGHT;
+        if (height > maxHeight) {
+            width *= maxHeight / height;
+            height = maxHeight;
         }
     }
 
-    // Set dimension to target size
+    // Set dimensions to target size
     canvas.width = width;
     canvas.height = height;
 
@@ -513,6 +513,6 @@ function resizeImage(img) {
     ctx.drawImage(img, 0, 0, width, height);
 
     // Encode image to Base64
-    var newImage = canvas.toDataURL("image/png");
-    return newImage;
+    resizedImage = canvas.toDataURL("image/png");
+    return resizedImage;
 }
