@@ -112,6 +112,7 @@ canvas {
 }
 
 #user-controls, #highscores-container {
+    max-width: 25%;
     float: left;
     margin: 30px 0 0 34px;
     padding: 20px 30px;
@@ -120,6 +121,7 @@ canvas {
 }
 
 #highscores-container {
+    min-width: 15%;
     padding-left: 40px;
     font-size: 18px;
     display: none;
@@ -168,7 +170,8 @@ svg rect{
     height: 85px;
 }
 #timerDiv {
-    margin-left: 80px;
+    width: 100%;
+    text-align: center;
 }
 
 #timer {
