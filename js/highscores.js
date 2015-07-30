@@ -3,15 +3,18 @@ $highscoresContainer = $('#highscores-container');
 $('#btn-highscores, #set-options').on('click', function() {
 	var imageName = getImageNameFromPath(window.defaultPuzzleImage),
         difficulty = window.defaultDifficulty,
-        allHighscores = JSON.parse(localStorage['highscores']),
+        allHighscores,
         currentImageHighscores,
         playerName,
         playerTime,
         $olElement;
 
-
     imageName = imageName + '-' + difficulty;
-    currentImageHighscores = allHighscores[imageName];
+
+    if (localStorage['highscores']) {
+        allHighscores = JSON.parse(localStorage['highscores']);
+        currentImageHighscores = allHighscores[imageName];
+    }
 
     if (currentImageHighscores) {
 	    $olElement = $('<ol/>');

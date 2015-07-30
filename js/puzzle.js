@@ -382,6 +382,7 @@ var playField = (function () {
                 congratsNote = "Congratulations!\nYou win :))\nYour time is: " + finalTime;
                 alert(congratsNote);
 
+                playerName = !!playerName ? playerName : 'Unnamed';
                 updateHighscores(_img, _puzzle_difficulty, playerName, finalTime, finalTimeInSecond);
                 localStorage.setItem('highscores', JSON.stringify(_highscores));
 
@@ -410,7 +411,9 @@ var playField = (function () {
                 player;
 
             // Update highscore list
-            _highscores = JSON.parse(localStorage['highscores']);
+            if (localStorage['highscores']) {
+                _highscores = JSON.parse(localStorage['highscores']);
+            }
 
             imageName = imageName + '-' + difficulty;
 
