@@ -6,6 +6,11 @@ $('#btn-gallery').on('click', function() {
     $('#gallery-container').slideToggle('slow');
 });
 
+// Show-hide highscores
+$('#btn-highscores').on('click', function() {
+    $('#highscores-container').slideToggle('slow');
+});
+
 // Upload your own image
 document.getElementById("uploadImg").addEventListener('change', function() {
     if (this.files && this.files[0]) {

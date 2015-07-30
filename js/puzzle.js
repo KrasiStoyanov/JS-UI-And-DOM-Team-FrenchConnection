@@ -365,15 +365,22 @@ var playField = (function () {
         Object.defineProperty(playfield, 'gameOver', {
             value: function () {
                 var finalTime,
-                    congratsNote;
+                    finalTimeInSeconds,
+                    congratsNote,
+                    playerName = prompt('Enter your name:');
 
                 _canvas.onmousedown = null;
                 _canvas.onmousemove = null;
                 _canvas.onmouseup = null;
-                finalTime = document.getElementById("timer").innerHTML;
-                congratsNote = "Congratulations!\nYou win :))\nYour time is: " + finalTime;
 
+                finalTime = document.getElementById("timer").innerHTML;
+                finalTimeInSeconds = getSeconds(finalTime);
+
+                congratsNote = "Congratulations!\nYou win :))\nYour time is: " + finalTime;
                 alert(congratsNote);
+
+                updateHighscores(_img, _puzzle_difficulty, playerName, finalTime, finalTimeInSeconds);
+                localStorage.setItem('highscores', JSON.stringify(_highscores));
 
                 playField.initPuzzle();
             }
@@ -394,6 +401,60 @@ var playField = (function () {
                 return o;
             }
         });
+
+        function updateHighscores(image, difficulty, playerName, readableTime, timeInSeconds) {
+            var imageName = getImageNameFromPath(image),
+                player;
+
+            // Update highscore list
+            _highscores = JSON.parse(localStorage['highscores']);
+
+            imageName = imageName + '-' + difficulty;
+
+            if (_highscores.hasOwnProperty(imageName)) {
+                if (_highscores[imageName].hasOwnProperty(playerName)) {
+                    player = _highscores[imageName][playerName];
+
+                    if (player.timeInSeconds > timeInSeconds) {
+                        _highscores[imageName][playerName].readableTime = readableTime;
+                        _highscores[imageName][playerName].timeInSeconds = timeInSeconds;
+                    }
+                } else { // Create player entry and add time
+                    _highscores[imageName][playerName] = {
+                        readableTime: readableTime,
+                        timeInSeconds: timeInSeconds
+                    };
+                }
+            } else { // Create image entry, add player and his time
+                _highscores[imageName] = _highscores[imageName] || {};
+                _highscores[imageName][playerName] = {
+                    readableTime: readableTime,
+                    timeInSeconds: timeInSeconds
+                }
+            }
+        }
+
+        function getImageNameFromPath(image) {
+            var imageParts = image.src.split('/'),
+                imageName = imageParts[imageParts.length - 1];
+
+            return imageName.replace(/\s/g, '');
+        }
+
+        function getSeconds(hhmmss) {
+            var timeParts = hhmmss.split(':'),
+                hours = timeParts[0],
+                minutes = timeParts[1],
+                seconds = timeParts[2],
+                resultTimeInSeconds = 0;
+
+            // Add hours, minites and seconds
+            resultTimeInSeconds += parseInt(hours) * 3600;
+            resultTimeInSeconds += parseInt(minutes) * 60;
+            resultTimeInSeconds += parseInt(seconds);
+
+            return resultTimeInSeconds;
+        }
 
          timerr = (function () {
             var clsStopwatch = function () {
