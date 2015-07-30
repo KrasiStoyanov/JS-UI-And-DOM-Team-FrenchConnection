@@ -370,7 +370,7 @@ var playField = (function () {
                 _canvas.onmousemove = null;
                 _canvas.onmouseup = null;
                 timerr.stopTimer();
-
+                alert("Congratulations! You win :)))");
                 playField.initPuzzle();
             }
         });
