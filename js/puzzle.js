@@ -109,6 +109,178 @@ var playField = (function () {
         return piece;
     }());
 
+    function resizeImage(img, maxWidth, maxHeight) {
+        // Create off-screen canvas for resizing purposes
+        var canvas = document.createElement('canvas'),
+            ctx = canvas.getContext('2d'),
+            width = img.width,
+            height = img.height,
+            resizedImage;
+
+        // Scale image
+        if (width > height) {
+            if (width > maxWidth) {
+                height *= maxWidth / width;
+                width = maxWidth;
+            }
+        } else {
+            if (height > maxHeight) {
+                width *= maxHeight / height;
+                height = maxHeight;
+            }
+        }
+
+        // Set dimensions to target size
+        canvas.width = width;
+        canvas.height = height;
+
+        // Draw source image into the off-screen canvas:
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Encode image to Base64
+        resizedImage = canvas.toDataURL("image/png");
+        return resizedImage;
+    }
+
+    function updateHighscores(image, difficulty, playerName, readableTime, timeInSeconds) {
+        var imageName = getImageNameFromPath(image),
+            player;
+
+        // Update highscore list
+        if (localStorage['highscores']) {
+            _highscores = JSON.parse(localStorage['highscores']);
+        }
+
+        imageName = imageName + '-' + difficulty;
+
+        if (_highscores.hasOwnProperty(imageName)) {
+            if (_highscores[imageName].hasOwnProperty(playerName)) {
+                player = _highscores[imageName][playerName];
+
+                if (player.timeInSeconds > timeInSeconds) {
+                    _highscores[imageName][playerName].readableTime = readableTime;
+                    _highscores[imageName][playerName].timeInSeconds = timeInSeconds;
+                }
+            } else { // Create player entry and add time
+                _highscores[imageName][playerName] = {
+                    readableTime: readableTime,
+                    timeInSeconds: timeInSeconds
+                };
+            }
+        } else { // Create image entry, add player and his time
+            _highscores[imageName] = _highscores[imageName] || {};
+            _highscores[imageName][playerName] = {
+                readableTime: readableTime,
+                timeInSeconds: timeInSeconds
+            }
+        }
+    }
+
+    function getImageNameFromPath(image) {
+        var imageParts = image.src.split('/'),
+            imageName = imageParts[imageParts.length - 1];
+
+        return imageName.replace(/\s/g, '');
+    }
+
+    function getSeconds(hhmmss) {
+        var timeParts = hhmmss.split(':'),
+            hours = timeParts[0],
+            minutes = timeParts[1],
+            seconds = timeParts[2],
+            resultTimeInSeconds = 0;
+
+        // Add hours, minites and seconds
+        resultTimeInSeconds += parseInt(hours) * 3600;
+        resultTimeInSeconds += parseInt(minutes) * 60;
+        resultTimeInSeconds += parseInt(seconds);
+
+        return resultTimeInSeconds;
+    }
+
+    gameTimer = (function () {
+        var clsStopwatch = function () {
+            var startAt = 0,
+                lapTime = 0;
+
+            var now = function () {
+                return (new Date()).getTime();
+            };
+
+            this.start = function () {
+                startAt = startAt ? startAt : now();
+            };
+
+
+            this.stop = function () {
+                lapTime = startAt ? lapTime + now() - startAt : lapTime;
+                startAt = 0;
+            };
+
+            this.reset = function () {
+                lapTime = startAt = 0;
+            };
+
+            this.time = function () {
+                return lapTime + (startAt ? now() - startAt : 0);
+            };
+        };
+
+        var playTime = new clsStopwatch(),
+            timer,
+            clocktimer;
+
+        function pad(num, size) {
+            var s = "0000" + num;
+            return s.substr(s.length - size);
+        }
+
+        function formatTime(time) {
+            var hours = 0,
+                minutes = 0,
+                seconds = 0,
+                newTime = '';
+
+            hours = Math.floor(time / (60 * 60 * 1000));
+            time = time % (60 * 60 * 1000);
+            minutes = Math.floor(time / (60 * 1000));
+            time = time % (60 * 1000);
+            seconds = Math.floor(time / 1000);
+
+            newTime = pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);
+            return newTime;
+        }
+
+        var tmr = {
+            showTimer:function() {
+                timer = document.getElementById('timer');
+                tmr.updateTimer();
+            },
+
+            updateTimer:function() {
+                timer.innerHTML = formatTime(playTime.time());
+            },
+
+            startTimer: function () {
+                clocktimer = setInterval("gameTimer.updateTimer()", 1000);
+                playTime.start();
+            },
+
+            stopTimer:function () {
+                playTime.stop();
+                clearInterval(clocktimer);
+            },
+
+            resetTimer:function () {
+                tmr.stopTimer();
+                playTime.reset();
+                tmr.updateTimer();
+            }
+        };
+
+        return tmr;
+    }());
+
     playField = (function () {
         var playfield = Object.create({});
 
@@ -158,8 +330,8 @@ var playField = (function () {
                 playField.createTitle("Click to Start Puzzle");
                 playField.buildPieces();
 
-                timerr.showTimer();
-                timerr.resetTimer();
+                gameTimer.showTimer();
+                gameTimer.resetTimer();
             }
         });
 
@@ -223,23 +395,25 @@ var playField = (function () {
                 }
                 _canvas.onmousedown = playField.onPuzzleClick;
 
-                timerr.startTimer();
+                gameTimer.startTimer();
             }
         });
 
         Object.defineProperty(playfield, 'onPuzzleClick', {
             value: function (e) {
-                if (e.layerX || e.layerX == 0) {
-                    _mouse.x = e.layerX - _canvas.offsetLeft;
-                    _mouse.y = e.layerY - _canvas.offsetTop;
+                if (e.pageX || e.pageY) {
+                    _mouse.x = e.pageX;
+                    _mouse.y = e.pageY;
+                }else {
+                    _mouse.x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+                    _mouse.y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
                 }
-                else if (e.offsetX || e.offsetX == 0) {
-                    _mouse.x = e.offsetX - _canvas.offsetLeft;
-                    _mouse.y = e.offsetY - _canvas.offsetTop;
-                }
+                _mouse.x -= _canvas.offsetLeft;
+                _mouse.y -= _canvas.offsetTop;
                 _currentPiece = playField.checkPieceClicked();
 
                 if (_currentPiece != null) {
+                    _currentDropPiece = _currentPiece;
                     _stage.clearRect(_currentPiece.currentX, _currentPiece.currentY, _pieceWidth, _pieceHeight);
                     _stage.save();
                     _stage.globalAlpha = 0.9;
@@ -406,145 +580,6 @@ var playField = (function () {
             }
         });
 
-        function updateHighscores(image, difficulty, playerName, readableTime, timeInSeconds) {
-            var imageName = getImageNameFromPath(image),
-                player;
-
-            // Update highscore list
-            if (localStorage['highscores']) {
-                _highscores = JSON.parse(localStorage['highscores']);
-            }
-
-            imageName = imageName + '-' + difficulty;
-
-            if (_highscores.hasOwnProperty(imageName)) {
-                if (_highscores[imageName].hasOwnProperty(playerName)) {
-                    player = _highscores[imageName][playerName];
-
-                    if (player.timeInSeconds > timeInSeconds) {
-                        _highscores[imageName][playerName].readableTime = readableTime;
-                        _highscores[imageName][playerName].timeInSeconds = timeInSeconds;
-                    }
-                } else { // Create player entry and add time
-                    _highscores[imageName][playerName] = {
-                        readableTime: readableTime,
-                        timeInSeconds: timeInSeconds
-                    };
-                }
-            } else { // Create image entry, add player and his time
-                _highscores[imageName] = _highscores[imageName] || {};
-                _highscores[imageName][playerName] = {
-                    readableTime: readableTime,
-                    timeInSeconds: timeInSeconds
-                }
-            }
-        }
-
-        function getImageNameFromPath(image) {
-            var imageParts = image.src.split('/'),
-                imageName = imageParts[imageParts.length - 1];
-
-            return imageName.replace(/\s/g, '');
-        }
-
-        function getSeconds(hhmmss) {
-            var timeParts = hhmmss.split(':'),
-                hours = timeParts[0],
-                minutes = timeParts[1],
-                seconds = timeParts[2],
-                resultTimeInSeconds = 0;
-
-            // Add hours, minites and seconds
-            resultTimeInSeconds += parseInt(hours) * 3600;
-            resultTimeInSeconds += parseInt(minutes) * 60;
-            resultTimeInSeconds += parseInt(seconds);
-
-            return resultTimeInSeconds;
-        }
-
-         timerr = (function () {
-            var clsStopwatch = function () {
-                var startAt = 0,
-                    lapTime = 0;
-
-                var now = function () {
-                    return (new Date()).getTime();
-                };
-
-                this.start = function () {
-                    startAt = startAt ? startAt : now();
-                };
-
-
-                this.stop = function () {
-                    lapTime = startAt ? lapTime + now() - startAt : lapTime;
-                    startAt = 0;
-                };
-
-                this.reset = function () {
-                    lapTime = startAt = 0;
-                };
-
-                this.time = function () {
-                    return lapTime + (startAt ? now() - startAt : 0);
-                };
-            };
-
-            var playTime = new clsStopwatch(),
-                timer,
-                clocktimer;
-
-            function pad(num, size) {
-                var s = "0000" + num;
-                return s.substr(s.length - size);
-            }
-
-            function formatTime(time) {
-                var hours = 0,
-                    minutes = 0,
-                    seconds = 0,
-                    newTime = '';
-
-                hours = Math.floor(time / (60 * 60 * 1000));
-                time = time % (60 * 60 * 1000);
-                minutes = Math.floor(time / (60 * 1000));
-                time = time % (60 * 1000);
-                seconds = Math.floor(time / 1000);
-
-                newTime = pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);
-                return newTime;
-            }
-
-            var tmr = {
-                showTimer:function() {
-                    timer = document.getElementById('timer');
-                    tmr.updateTimer();
-                },
-
-                updateTimer:function() {
-                     timer.innerHTML = formatTime(playTime.time());
-                },
-
-                startTimer: function () {
-                     clocktimer = setInterval("timerr.updateTimer()", 1000);
-                     playTime.start();
-                },
-
-                stopTimer:function () {
-                     playTime.stop();
-                     clearInterval(clocktimer);
-                },
-
-                resetTimer:function () {
-                     tmr.stopTimer();
-                     playTime.reset();
-                     tmr.updateTimer();
-                }
-            };
-
-            return tmr;
-        }());
-
         return playfield;
     }());
 
@@ -553,37 +588,6 @@ var playField = (function () {
 
 function createPlayField(imageSrc, difficulty) {
     var plr = Object.create(playField).init(imageSrc, difficulty);
+    return plr;
 }
 
-function resizeImage(img, maxWidth, maxHeight) {
-    // Create off-screen canvas for resizing purposes
-    var canvas = document.createElement('canvas'),
-        ctx = canvas.getContext('2d'),
-        width = img.width,
-        height = img.height,
-        resizedImage;
-
-    // Scale image
-    if (width > height) {
-        if (width > maxWidth) {
-            height *= maxWidth / width;
-            width = maxWidth;
-        }
-    } else {
-        if (height > maxHeight) {
-            width *= maxHeight / height;
-            height = maxHeight;
-        }
-    }
-
-    // Set dimensions to target size
-    canvas.width = width;
-    canvas.height = height;
-
-    // Draw source image into the off-screen canvas:
-    ctx.drawImage(img, 0, 0, width, height);
-
-    // Encode image to Base64
-    resizedImage = canvas.toDataURL("image/png");
-    return resizedImage;
-}
