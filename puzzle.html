@@ -46,6 +46,8 @@
     </canvas>
 
     <div id="user-controls" class="clearfix">
+        <button id="btn-highscores" class="btn btn-sm btn-info">Show highscores</button>
+        <hr />
         <label class="btn btn-sm btn-info" for="uploadImg">
             <input id="uploadImg" type="file" style="display:none;">
             Upload own image
@@ -71,6 +73,9 @@
         <div id ="timerDiv"><span id="timer"></span></div>
         <button type="submit" id="set-options" class="btn btn-lg btn-success">Set</button>
     </div>
+    <div id="highscores-container" class="clearfix">
+        No highscores for this picture.
+    </div>
     <div id="gallery-container" class="gallery clearfix"></div>
 </div>
 
@@ -79,6 +84,7 @@
 <script src="js/puzzle.js"></script>
 <script src="js/gallery.js"></script>
 <script src="js/puzzle-controls.js"></script>
+<script src="js/highscores.js"></script>
 
 <!-- Fade In animation -->
 <script>

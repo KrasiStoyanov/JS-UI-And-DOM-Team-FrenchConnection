@@ -111,13 +111,18 @@ canvas {
     border-radius: 6px;
 }
 
-#user-controls {
+#user-controls, #highscores-container {
     float: left;
-    margin: 30px 60px;
+    margin: 30px 0 0 34px;
     padding: 20px 30px;
     border: 6px solid #27AAE1;
     border-radius: 6px;
-    
+}
+
+#highscores-container {
+    padding-left: 40px;
+    font-size: 18px;
+    display: none;
 }
 
 .loader{
