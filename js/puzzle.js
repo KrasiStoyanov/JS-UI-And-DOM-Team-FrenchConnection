@@ -2,6 +2,8 @@ var mainCanvas = document.getElementById('canvas');
 const MAX_CANVAS_WIDTH = mainCanvas.width;
 const MAX_CANVAS_HEIGHT = mainCanvas.height;
 
+var _highscores = {};
+
 var playField = (function () {
 
     const PUZZLE_HOVER_TINT = '#009900';
@@ -365,7 +367,7 @@ var playField = (function () {
         Object.defineProperty(playfield, 'gameOver', {
             value: function () {
                 var finalTime,
-                    finalTimeInSeconds,
+                    finalTimeInSecond,
                     congratsNote,
                     playerName = prompt('Enter your name:');
 
@@ -373,13 +375,14 @@ var playField = (function () {
                 _canvas.onmousemove = null;
                 _canvas.onmouseup = null;
 
+                debugger;
                 finalTime = document.getElementById("timer").innerHTML;
-                finalTimeInSeconds = getSeconds(finalTime);
+                finalTimeInSecond = getSeconds(finalTime);
 
                 congratsNote = "Congratulations!\nYou win :))\nYour time is: " + finalTime;
                 alert(congratsNote);
 
-                updateHighscores(_img, _puzzle_difficulty, playerName, finalTime, finalTimeInSeconds);
+                updateHighscores(_img, _puzzle_difficulty, playerName, finalTime, finalTimeInSecond);
                 localStorage.setItem('highscores', JSON.stringify(_highscores));
 
                 playField.initPuzzle();
