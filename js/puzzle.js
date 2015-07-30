@@ -222,7 +222,6 @@ var playField = (function () {
                 _canvas.onmousedown = playField.onPuzzleClick;
 
                 timerr.startTimer();
-                console.log('timer has been started!');
             }
         });
 
@@ -359,20 +358,23 @@ var playField = (function () {
                 }
                 if (gameWin) {
                     setTimeout(playField.gameOver, 500);
-                    timer.stopTimer();
                 }
             }
         });
 
         Object.defineProperty(playfield, 'gameOver', {
             value: function () {
+                var finalTime,
+                    congratsNote;
+
                 _canvas.onmousedown = null;
                 _canvas.onmousemove = null;
                 _canvas.onmouseup = null;
-                timerr.stopTimer();
-                var finalTime = document.getElementById("timer").innerHTML;
-                var congratsNote = "Congratulations!\nYou win :))\nYour time is: " + finalTime;
+                finalTime = document.getElementById("timer").innerHTML;
+                congratsNote = "Congratulations!\nYou win :))\nYour time is: " + finalTime;
+
                 alert(congratsNote);
+
                 playField.initPuzzle();
             }
         });
@@ -447,31 +449,31 @@ var playField = (function () {
             }
 
             var tmr = {
-               showTimer:function() {
-                timer = document.getElementById('timer');
-                tmr.updateTimer();
-            },
+                showTimer:function() {
+                    timer = document.getElementById('timer');
+                    tmr.updateTimer();
+                },
 
-             updateTimer:function() {
-                timer.innerHTML = formatTime(playTime.time());
-            },
+                updateTimer:function() {
+                     timer.innerHTML = formatTime(playTime.time());
+                },
 
-           startTimer: function () {
-                clocktimer = setInterval("timerr.updateTimer()", 1000);
-                playTime.start();
-            },
+                startTimer: function () {
+                     clocktimer = setInterval("timerr.updateTimer()", 1000);
+                     playTime.start();
+                },
 
-            stopTimer:function () {
-                playTime.stop();
-                clearInterval(clocktimer);
-            },
+                stopTimer:function () {
+                     playTime.stop();
+                     clearInterval(clocktimer);
+                },
 
-            resetTimer:function () {
-                tmr.stopTimer();
-                playTime.reset();
-                tmr.updateTimer();
-            }
-        };
+                resetTimer:function () {
+                     tmr.stopTimer();
+                     playTime.reset();
+                     tmr.updateTimer();
+                }
+            };
 
             return tmr;
         }());
