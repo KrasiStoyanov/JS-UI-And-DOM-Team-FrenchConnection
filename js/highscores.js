@@ -1,6 +1,30 @@
 $highscoresContainer = $('#highscores-container');
 
-$('#btn-highscores, #set-options').on('click', function() {
+$('#btn-highscores, #set-options').on('click', refreshHighscoreList);
+
+function getImageNameFromPath(image) {
+    var imageParts = image.split('/'),
+        imageName = imageParts[imageParts.length - 1];
+
+    return imageName.replace(/\s/g, '');
+}
+
+function sortHighscores(imageHighscores) {
+    var highscores = [],
+        playerName;
+
+    for (playerName in imageHighscores) {
+    	highscores.push(imageHighscores[playerName]);
+    }
+
+    highscores.sort(function(firstPlayer, secondPlayer) {
+    	return firstPlayer.timeInSeconds - secondPlayer.timeInSeconds;
+    });
+
+    return highscores;
+}
+
+function refreshHighscoreList() {
 	var imageName = getImageNameFromPath(window.defaultPuzzleImage),
         difficulty = window.defaultDifficulty,
         allHighscores,
@@ -34,26 +58,4 @@ $('#btn-highscores, #set-options').on('click', function() {
 	} else {
 		$('#highscores-container').html('No highscores for this picture.');
 	}
-});
-
-function getImageNameFromPath(image) {
-    var imageParts = image.split('/'),
-        imageName = imageParts[imageParts.length - 1];
-
-    return imageName.replace(/\s/g, '');
-}
-
-function sortHighscores(imageHighscores) {
-    var highscores = [],
-        playerName;
-
-    for (playerName in imageHighscores) {
-    	highscores.push(imageHighscores[playerName]);
-    }
-
-    highscores.sort(function(firstPlayer, secondPlayer) {
-    	return firstPlayer.timeInSeconds - secondPlayer.timeInSeconds;
-    });
-
-    return highscores;
 }

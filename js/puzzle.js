@@ -560,7 +560,8 @@ var playField = (function () {
                 playerName = !!playerName ? playerName : 'Unnamed';
                 updateHighscores(_img, _puzzle_difficulty, playerName, finalTime, finalTimeInSecond);
                 localStorage.setItem('highscores', JSON.stringify(_highscores));
-
+                refreshHighscoreList();
+                
                 playField.initPuzzle();
             }
         });
