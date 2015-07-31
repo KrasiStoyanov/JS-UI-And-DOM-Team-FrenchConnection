@@ -163,6 +163,7 @@ var playField = (function () {
                 }
             } else { // Create player entry and add time
                 _highscores[imageName][playerName] = {
+                    name: playerName,
                     readableTime: readableTime,
                     timeInSeconds: timeInSeconds
                 };
@@ -170,6 +171,7 @@ var playField = (function () {
         } else { // Create image entry, add player and his time
             _highscores[imageName] = _highscores[imageName] || {};
             _highscores[imageName][playerName] = {
+                name: playerName,
                 readableTime: readableTime,
                 timeInSeconds: timeInSeconds
             }
@@ -549,7 +551,6 @@ var playField = (function () {
                 _canvas.onmousemove = null;
                 _canvas.onmouseup = null;
 
-                debugger;
                 finalTime = document.getElementById("timer").innerHTML;
                 finalTimeInSecond = getSeconds(finalTime);
 
