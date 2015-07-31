@@ -5,6 +5,7 @@ $('#btn-highscores, #set-options').on('click', function() {
         difficulty = window.defaultDifficulty,
         allHighscores,
         currentImageHighscores,
+        player,
         playerName,
         playerTime,
         $olElement;
@@ -12,14 +13,17 @@ $('#btn-highscores, #set-options').on('click', function() {
     imageName = imageName + '-' + difficulty;
 
     if (localStorage['highscores']) {
+    	debugger;
         allHighscores = JSON.parse(localStorage['highscores']);
         currentImageHighscores = allHighscores[imageName];
+        currentImageHighscores = sortHighscores(currentImageHighscores);
     }
 
-    if (currentImageHighscores) {
+    if (currentImageHighscores.length > 0) {
 	    $olElement = $('<ol/>');
-	    for (playerName in currentImageHighscores) {
-	        playerTime = currentImageHighscores[playerName].readableTime;
+	    for (player in currentImageHighscores) {
+	    	playerName = currentImageHighscores[player].name;
+	        playerTime = currentImageHighscores[player].readableTime;
 
 	        $('<li/>')
 	            .html(playerName + ' - ' + playerTime)
@@ -37,4 +41,19 @@ function getImageNameFromPath(image) {
         imageName = imageParts[imageParts.length - 1];
 
     return imageName.replace(/\s/g, '');
+}
+
+function sortHighscores(imageHighscores) {
+    var highscores = [],
+        playerName;
+
+    for (playerName in imageHighscores) {
+    	highscores.push(imageHighscores[playerName]);
+    }
+
+    highscores.sort(function(firstPlayer, secondPlayer) {
+    	return firstPlayer.timeInSeconds - secondPlayer.timeInSeconds;
+    });
+
+    return highscores;
 }
