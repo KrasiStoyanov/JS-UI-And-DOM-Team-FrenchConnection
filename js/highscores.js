@@ -1,5 +1,3 @@
-$highscoresContainer = $('#highscores-container');
-
 $('#btn-highscores, #set-options').on('click', refreshHighscoreList);
 
 function getImageNameFromPath(image) {
@@ -14,7 +12,7 @@ function sortHighscores(imageHighscores) {
         playerName;
 
     for (playerName in imageHighscores) {
-    	highscores.push(imageHighscores[playerName]);
+        highscores.push(imageHighscores[playerName]);
     }
 
     highscores.sort(function(firstPlayer, secondPlayer) {
@@ -25,10 +23,10 @@ function sortHighscores(imageHighscores) {
 }
 
 function refreshHighscoreList() {
-	var imageName = getImageNameFromPath(window.defaultPuzzleImage),
+    var imageName = getImageNameFromPath(window.defaultPuzzleImage),
         difficulty = window.defaultDifficulty,
         allHighscores,
-        currentImageHighscores,
+        currentImageHighscores = [],
         player,
         playerName,
         playerTime,
@@ -37,25 +35,24 @@ function refreshHighscoreList() {
     imageName = imageName + '-' + difficulty;
 
     if (localStorage['highscores']) {
-    	debugger;
         allHighscores = JSON.parse(localStorage['highscores']);
         currentImageHighscores = allHighscores[imageName];
         currentImageHighscores = sortHighscores(currentImageHighscores);
     }
 
     if (currentImageHighscores.length > 0) {
-	    $olElement = $('<ol/>');
-	    for (player in currentImageHighscores) {
-	    	playerName = currentImageHighscores[player].name;
-	        playerTime = currentImageHighscores[player].readableTime;
+        $olElement = $('<ol/>');
+        for (player in currentImageHighscores) {
+            playerName = currentImageHighscores[player].name;
+            playerTime = currentImageHighscores[player].readableTime;
 
-	        $('<li/>')
-	            .html(playerName + ' - ' + playerTime)
-	            .appendTo($olElement);
-	    }
+            $('<li/>')
+                .html(playerName + ' - ' + playerTime)
+                .appendTo($olElement);
+        }
 
-	    $('#highscores-container').html($olElement);
-	} else {
-		$('#highscores-container').html('No highscores for this picture.');
-	}
+        $('#highscores-container').html($olElement);
+    } else {
+        $('#highscores-container').html('No highscores for this picture.');
+    }
 }
